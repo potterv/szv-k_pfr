@@ -2,7 +2,7 @@ package ru.pfr;
 
 import java.time.LocalDate;
 
-public class Employee {
+public class Employee implements Comparable<Employee>{
 
     public String toString(){
 
@@ -60,6 +60,11 @@ public class Employee {
         this.city = builder.city;
         this.namepolicyholdershort = builder.namepolicyholdershort;
         this.regnumber = builder.regnumber;
+    }
+
+    @Override
+    public int compareTo(Employee o) {
+        return this.surname.toString().compareTo(o.surname.toString()) ;
     }
 
     public static  class Builder{
