@@ -149,21 +149,30 @@ public class DbHandler {
 
 
 
-
-    // поиск информации о человеке по СНИЛС
-    public Employee findHumen (String snils) {
+    /**
+     * Метод для выборки информации из таблицы
+     * @param nameTable - имя таблицы
+     * @param nameColl - слоаврь наименований палей и их значений в таблице
+     * @param param - слоаврь наименований палей и их значений в таблице
+     */
+    //
+    public Employee getEmployee(String nameTable, String nameColl,LinkedHashMap param) {
 
         boolean isdDate=false;
         String country = "-";
         String area ="-";
         String region = "-";
         String city = "-";
+        String calls =  param.keySet().toString().replaceAll("\\["," ").replaceAll("]"," ");
+        String vallColl = param.get(nameColl).toString();
 
+        String sql = "".join("",
+                "SELECT ",calls,
+                " FROM db2admin.",nameTable," WHERE ",nameColl,"=?");
 //        try (Statement statement = this.connection.createStatement()  )
-        try (  PreparedStatement statement = this.connection.prepareStatement(
-                        "SELECT snils, country, area, region, city  FROM HUMEN WHERE snils = ?"))
+        try (  PreparedStatement statement = this.connection.prepareStatement(sql))
         {
-            statement.setObject(1, snils);
+            statement.setObject(1, vallColl);
             // Выполняем запрос
             ResultSet resultSet = statement.executeQuery();
 
@@ -199,15 +208,15 @@ public class DbHandler {
         finally {
             if (isdDate){
 
-                return new Employee.Builder(new StringBuffer(snils)).getPFR(
+                return new Employee.Builder(new StringBuffer(param.get(nameColl).toString())).getPFR(
                     new StringBuffer(country),
                     new StringBuffer(area),
                     new StringBuffer(region),
                     new StringBuffer(city)).buidl();
 
             }else {
-                log.warn("".join(" ",snils, " в базе данный снилс не найден"));
-                return new Employee.Builder(new StringBuffer(snils)).getPFR(
+                log.warn("".join(" ",param.get(nameColl).toString(), " в базе данный снилс не найден"));
+                return new Employee.Builder(new StringBuffer(param.get(nameColl).toString())).getPFR(
                         new StringBuffer("-"),
                         new StringBuffer("-"),
                         new StringBuffer("-"),
@@ -218,72 +227,72 @@ public class DbHandler {
     }
 
     // поиск информации о человеке по СНИЛС
-    public Employee findHumen (String snils,Connection connection) {
-
-        boolean isdDate=false;
-        String country = "-";
-        String area ="-";
-        String region = "-";
-        String city = "-";
-
-//        try (Statement statement = this.connection.createStatement()  )
-        try (  PreparedStatement statement = connection.prepareStatement(
-                "SELECT snils, country, area, region, city  FROM HUMEN WHERE snils = ?"))
-        {
-            statement.setObject(1, snils);
-            // Выполняем запрос
-            ResultSet resultSet = statement.executeQuery();
-
-            log.info("Данные из базы получены");
-            if (resultSet.next()) {
-                if (resultSet.getString("snils")!=null){
-                    isdDate =true;
-                }
-                country = resultSet.getString("country");
-                if (country == null) {
-                    country = "-";
-                }
-                area = resultSet.getString("area");
-                if (area == null) {
-                    area = "-";
-                }
-                region = resultSet.getString("region");
-                if (region == null) {
-                    region = "-";
-                }
-                city = resultSet.getString("city");
-                if (city == null) {
-                    city = "-";
-                }
-            }
-
-        } catch (SQLException e) {
-            log.error("Ошибка доступности данных");
-//            log.error("Это сообщение ошибки, Метод findHumen вернул пустой список");
-            log.error(new String(e.getSQLState()));
-            log.error(e.getStackTrace().toString());
-        }
-        finally {
-            if (isdDate){
-
-                return new Employee.Builder(new StringBuffer(snils)).getPFR(
-                        new StringBuffer(country),
-                        new StringBuffer(area),
-                        new StringBuffer(region),
-                        new StringBuffer(city)).buidl();
-
-
-            }else {
-                log.warn("".join(" ",snils, " в базе данный снилс не найден"));
-                return new Employee.Builder(new StringBuffer(snils)).getPFR(
-                        new StringBuffer("-"),
-                        new StringBuffer("-"),
-                        new StringBuffer("-"),
-                        new StringBuffer("-")).buidl();
-            }
-        }
-
-    }
+//    public Employee getEmployee(String snils) {
+//
+//        boolean isdDate=false;
+//        String country = "-";
+//        String area ="-";
+//        String region = "-";
+//        String city = "-";
+//
+////        try (Statement statement = this.connection.createStatement()  )
+//        try (  PreparedStatement statement = connection.prepareStatement(
+//                "SELECT snils, country, area, region, city  FROM HUMEN WHERE snils = ?"))
+//        {
+//            statement.setObject(1, snils);
+//            // Выполняем запрос
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            log.info("Данные из базы получены");
+//            if (resultSet.next()) {
+//                if (resultSet.getString("snils")!=null){
+//                    isdDate =true;
+//                }
+//                country = resultSet.getString("country");
+//                if (country == null) {
+//                    country = "-";
+//                }
+//                area = resultSet.getString("area");
+//                if (area == null) {
+//                    area = "-";
+//                }
+//                region = resultSet.getString("region");
+//                if (region == null) {
+//                    region = "-";
+//                }
+//                city = resultSet.getString("city");
+//                if (city == null) {
+//                    city = "-";
+//                }
+//            }
+//
+//        } catch (SQLException e) {
+//            log.error("Ошибка доступности данных");
+////            log.error("Это сообщение ошибки, Метод findHumen вернул пустой список");
+//            log.error(new String(e.getSQLState()));
+//            log.error(e.getStackTrace().toString());
+//        }
+//        finally {
+//            if (isdDate){
+//
+//                return new Employee.Builder(new StringBuffer(snils)).getPFR(
+//                        new StringBuffer(country),
+//                        new StringBuffer(area),
+//                        new StringBuffer(region),
+//                        new StringBuffer(city)).buidl();
+//
+//
+//            }else {
+//                log.warn("".join(" ",snils, " в базе данный снилс не найден"));
+//                return new Employee.Builder(new StringBuffer(snils)).getPFR(
+//                        new StringBuffer("-"),
+//                        new StringBuffer("-"),
+//                        new StringBuffer("-"),
+//                        new StringBuffer("-")).buidl();
+//            }
+//        }
+//
+//    }
 
     /**
      * Метод для добовления записей в таблицу с параметрами
