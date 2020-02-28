@@ -284,6 +284,59 @@ public class DbHandler {
         }
 
     }
+
+    /**
+     * Метод для добовления записей в таблицу с параметрами
+     * @param nameTable - имя таблицы
+     * @param nameColls - слоаврь наименований палей и их значений в таблице
+     */
+    public void addData(String nameTable, LinkedHashMap nameColls) throws SQLException {
+        StringBuffer volue = new StringBuffer();
+        try (PreparedStatement statement = this.connection.prepareStatement("".join("", "SELECT ", "snils ", "FROM db2admin.", nameTable, " Where snils=?")))
+
+         {
+            statement.setObject(1,nameColls.get("snils").toString());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                for (int countValue = 0; countValue<nameColls.size();countValue++){
+
+                    volue.append("?");
+                        if (countValue+1<nameColls.size()){
+                            volue.append(",");
+                        }
+                }
+                try (PreparedStatement statement1 = this.connection.prepareStatement("".join(" ",
+                        "INSERT INTO db2admin.",
+                        nameTable,
+                        nameColls.keySet().toString().replaceAll("\\[","(").replaceAll("]",")"),
+                        "VALUES (",
+                        volue,
+                        ")"
+
+                        )))
+                     {
+                    for (int countValue = 0; countValue<nameColls.size();countValue++){
+                      statement1.setObject(countValue+1,  nameColls.values().toArray()[countValue].toString());
+                    }
+                    log.info("".join("","В таблицу ", nameTable," добавлена запись с uuid",nameColls.get("uuid_R").toString()));
+                    statement1.executeUpdate();
+
+                }catch (Exception e){
+                    log.error(e.getMessage());
+                    log.error(e.getStackTrace().toString());
+                }
+            } else {
+                log.warn("".join(" ", "Снилс по uuid-у'",  nameColls.get("uuid_R").toString(), "' уже существует  и не будет добавлен в таблицу", nameTable));
+//                System.out.println();
+            }
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            log.error(e.getStackTrace().toString());
+        }
+    }
+
     // Константа, в которой хранится адрес подключения
 //    private static final String CON_STR = "jdbc:sqlite:D:/IdeaProject/szvk/db/szvk.db";
     public void close() throws SQLException {
