@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static javax.xml.stream.XMLInputFactory.*;
 
@@ -33,11 +34,12 @@ public class StaxStreamProcessor {
 //    }
     public StaxStreamProcessor(){
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
+        this.uuidPachka=UUID.randomUUID().toString();
     }
 
 
     public List<Employee> getAllEmployee() {
-        log.info(String.join(" ","Данные о страхователе и его сотрдниках прочитаны из файла ",policyholder.get("namefile").toString()));
+        log.info(String.join(" ","Данные о страхователе и его сотрудниках прочитаны из файла ",policyholder.get("namefile").toString()));
         return this.employeeList;
     }
 
@@ -103,8 +105,10 @@ public class StaxStreamProcessor {
 //  Записываем  информацию о сотрудниках страхователя который подал данные
 
               if (parser.getLocalName().equals("СтраховойНомер")){
+                  uuidRecord=UUID.randomUUID().toString();
                   snils = new String();
                   snils = parser.getElementText();
+
 
               }
               if (parser.getLocalName().equals("Фамилия")){
@@ -148,26 +152,35 @@ public class StaxStreamProcessor {
 
             if (event == XMLStreamConstants.END_ELEMENT) {
                 if (parser.getLocalName().equals("СоставительПачки")){
-                    log.info(String.join(" ","Начат  процес анализа, чтения и загрузки данных из файла",policyholder.get("namefile").toString()));
+                    log.info(String.join(" ","Начат  процес  чтения и загрузки данных из файла",policyholder.get("namefile").toString()));
+                    log.info(String.join(" ","Начат  процес чтения  данных по страхователю",policyholder.get("namepolicyholder").toString(),policyholder.get("regnumber").toString()));
                     continue;
                 }
                 if (parser.getLocalName().equals("КОНВЕРТАЦИЯ")){
+
+
                     employeeList.add(new Employee.Builder(new StringBuffer(snils)).getPolicyholder(
+                            new StringBuffer(uuidPachka),
+                            new StringBuffer(uuidRecord),
                             new StringBuffer(surname),
                             new StringBuffer(name),
                             new StringBuffer(patronymic),
                             LocalDate.parse(birthday, DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-                            residenceCrimea).buidl());
-//                    ,
-//                            new StringBuffer(policyholder.get("namepolicyholdershort").toString()),
-//                            new StringBuffer(policyholder.get("regnumber").toString())).buidl());
+                            residenceCrimea,
+                            new StringBuffer(policyholder.get("namepolicyholdershort").toString()),
+                            new StringBuffer(policyholder.get("regnumber").toString())).buidl());
+                    log.info(String.join(" ","Обработан UUID записи ",uuidRecord," в пачке с UUID - ",uuidPachka));
+
                 }
 
             }
         }
         log.info(String.join(" ","Завершен  процес анализа, чтения и загрузки данных из файла",policyholder.get("namefile").toString()));
+        log.info(String.join(" ","Завершен  процес чтения и загрузки  данных по страхователю",policyholder.get("namepolicyholder").toString(),policyholder.get("regnumber").toString()));
     }
     private Map policyholder =null;
+    private String uuidPachka=null;
+    private String uuidRecord=null;
     private String snils=null;
     private String surname=null;
     private String name =null;

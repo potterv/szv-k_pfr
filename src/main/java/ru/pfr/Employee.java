@@ -4,31 +4,74 @@ import java.time.LocalDate;
 
 public class Employee implements Comparable<Employee>{
 
+
     public String toString(){
 
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-                  this.snils, this.surname, this.name, this.patronymic, this.birthday,this.residenceCrimea ,this.country, this.area, this.region, this.city);
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                  this.uuidPachka,this.uuidRecord,this.snils, this.surname, this.name, this.patronymic, this.birthday,this.country, this.area, this.region, this.city);
 //                this.namepolicyholdershort,regnumber, this.snils, this.surname, this.name, this.patronymic, this.birthday,this.residenceCrimea ,this.country, this.area, this.region, this.city);
+    }
+
+    public String toFms(){
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                this.uuidPachka,this.uuidRecord, this.surname, this.name, this.patronymic, this.birthday,this.country, this.area, this.region, this.city);
+
+    }
+
+
+    public StringBuffer getUuidPachka(){
+        return this.uuidPachka;
+    }
+
+    public StringBuffer getUuidRecord(){
+        return this.uuidRecord;
     }
 
     public StringBuffer getSnils(){
         return this.snils;
     }
 
+    public StringBuffer getSurname(){
+        return this.surname;
+    }
+
+    public StringBuffer getName(){
+        return this.name;
+    }
+
+    public StringBuffer getPatronymic(){
+        return this.patronymic;
+    }
+
+    public LocalDate getBirthday(){
+        return this.birthday;
+    }
+
+    public boolean getResidenceCrimea(){
+        return this.residenceCrimea;
+    }
+
     public StringBuffer getCountry() {
-        return country;
+        return this.country;
     }
 
     public StringBuffer getArea() {
-        return area;
+        return this.area;
     }
 
     public StringBuffer getRegion() {
-        return region;
+        return this.region;
     }
 
     public StringBuffer getCity() {
-        return city;
+        return this.city;
+    }
+
+    public StringBuffer getPolicyholderShort() {
+        return this.namepolicyholdershort;
+    }
+    public StringBuffer getRegnumber() {
+        return this.regnumber;
     }
 
     public void setCountry(StringBuffer country) {
@@ -48,6 +91,8 @@ public class Employee implements Comparable<Employee>{
     }
 
     private Employee(Builder builder) {
+        this.uuidPachka = builder.uuidPachka;
+        this.uuidRecord = builder.uuidRecord;
         this.snils = builder.snils;
         this.surname = builder.surname;
         this.name = builder.name;
@@ -61,7 +106,7 @@ public class Employee implements Comparable<Employee>{
         this.namepolicyholdershort = builder.namepolicyholdershort;
         this.regnumber = builder.regnumber;
     }
-
+// Реализация метода сравнения интерфейса Comparable для сортировки списка по полю surname, в алфавитном порядке
     @Override
     public int compareTo(Employee o) {
         return this.surname.toString().compareTo(o.surname.toString()) ;
@@ -76,35 +121,39 @@ public class Employee implements Comparable<Employee>{
             this.name = name;
             this.patronymic = patronymic;
         }
-        public Builder  getPolicyholder(StringBuffer valSurname,StringBuffer valName, StringBuffer valPatronymic, LocalDate valBirthday, boolean valResidenceCrimea, StringBuffer valNamePolicyholdershort, StringBuffer valRegnumber){
-            surname = valSurname;
-            name = valName;
-            patronymic = valPatronymic;
-            residenceCrimea = valResidenceCrimea;
-            birthday = valBirthday;
-            namepolicyholdershort= valNamePolicyholdershort;
-            regnumber = valRegnumber;
+        public Builder  getPolicyholder(StringBuffer valUuidPachka,StringBuffer valUuidRecord,StringBuffer valSurname,StringBuffer valName, StringBuffer valPatronymic, LocalDate valBirthday, boolean valResidenceCrimea, StringBuffer valNamePolicyholdershort, StringBuffer valRegnumber){
+            this.uuidPachka=valUuidPachka;
+            this.uuidRecord=valUuidRecord;
+            this.surname = valSurname;
+            this.name = valName;
+            this.patronymic = valPatronymic;
+            this.residenceCrimea = valResidenceCrimea;
+            this.birthday = valBirthday;
+            this.namepolicyholdershort= valNamePolicyholdershort;
+            this.regnumber = valRegnumber;
             return this;
         }
 
-        public Builder  getPolicyholder(StringBuffer valSurname,StringBuffer valName, StringBuffer valPatronymic, LocalDate valBirthday, boolean valResidenceCrimea){
-            surname = valSurname;
-            name = valName;
-            patronymic = valPatronymic;
-            residenceCrimea = valResidenceCrimea;
-            birthday = valBirthday;
+        public Builder  getPolicyholder(StringBuffer valUuidPachka,StringBuffer valUuidRecord, StringBuffer valSurname,StringBuffer valName, StringBuffer valPatronymic, LocalDate valBirthday, boolean valResidenceCrimea){
+            this.uuidPachka=valUuidPachka;
+            this.uuidRecord=valUuidRecord;
+            this.surname = valSurname;
+            this.name = valName;
+            this.patronymic = valPatronymic;
+            this.residenceCrimea = valResidenceCrimea;
+            this.birthday = valBirthday;
 
             return this;
         }
 
         public  Builder getPFR(StringBuffer valCountry, StringBuffer valArea, StringBuffer valRegion, StringBuffer valCity){
-            surname = surname;
-            name = name;
-            patronymic = patronymic;
-            country = valCountry;
-            area = valArea;
-            region = valRegion;
-            city = valCity;
+            this.surname = surname;
+            this.name = name;
+            this.patronymic = patronymic;
+            this.country = valCountry;
+            this.area = valArea;
+            this.region = valRegion;
+            this.city = valCity;
 
             return this;
         }
@@ -114,6 +163,8 @@ public class Employee implements Comparable<Employee>{
             return new Employee (this); }
         
         //Обязательные параметры
+        private StringBuffer uuidPachka;
+        private StringBuffer uuidRecord;
         private StringBuffer snils;
         private StringBuffer surname;
         private StringBuffer name;
@@ -136,6 +187,8 @@ public class Employee implements Comparable<Employee>{
 
 
     private int id;
+    private StringBuffer uuidPachka;
+    private StringBuffer uuidRecord;
     private StringBuffer snils;
     private StringBuffer surname;
     private StringBuffer name;
