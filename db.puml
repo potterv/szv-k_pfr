@@ -1,0 +1,12 @@
+@startuml
+
+
+
+database "DB2" {
+rectangle human{
+}
+
+
+}
+
+@enduml
