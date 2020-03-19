@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator.*;
 //import org.sqlite.JDBC;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.*;
 
 import java.sql.PreparedStatement;
@@ -25,7 +26,7 @@ public class DbHandler {
 
     public static synchronized DbHandler getInstance() throws SQLException {
         if (instance == null)
-            instance = new DbHandler(true);
+            instance = new DbHandler();
         return instance;
     }
 
@@ -51,7 +52,7 @@ public class DbHandler {
 //
 //    }
 
-    private DbHandler(boolean db) throws SQLException {
+    private DbHandler() throws SQLException {
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
         String jdbcClassName="com.ibm.db2.jcc.DB2Driver";
         String url="jdbc:db2://10.92.0.71:50000/szvk";
@@ -156,7 +157,7 @@ public class DbHandler {
      * @param param - слоаврь наименований палей и их значений в таблице
      */
     //
-    public Employee getEmployee(String nameTable, String nameColl,LinkedHashMap param) {
+    public Employee getHumen(String nameTable, String nameColl, LinkedHashMap param) {
 
         boolean isdDate=false;
         String country = "-";
@@ -224,6 +225,97 @@ public class DbHandler {
             }
         }
 
+    }
+
+    /**
+     * Метод для получения записей в таблицу с параметрами
+     * @param nameTable - имя таблицы
+     * @param nameColl - Имя поля в таблице по кторому выполняется фильтр
+     */
+    // поиск информации о человеке по СНИЛС
+    public List<Employee>  getEmployee(String nameTable, String nameColl, LinkedHashMap param) {
+        List<Employee> employeeList = new LinkedList<Employee>();
+        employeeList = null;
+        boolean isdDate=false;
+//        String country = "-";
+//        String area ="-";
+//        String region = "-";
+//        String city = "-";
+        String calls =  param.keySet().toString().replaceAll("\\["," ").replaceAll("]"," ");
+        String vallColl = param.get(nameColl).toString();
+
+        String sql = "".join("",
+                "SELECT ",calls,
+                " FROM db2admin.",nameTable," WHERE ",nameColl,"=?");
+//        try (Statement statement = this.connection.createStatement()  )
+        try (  PreparedStatement statement = this.connection.prepareStatement(sql))
+        {
+            statement.setObject(1, vallColl);
+            // Выполняем запрос
+            ResultSet resultSet = statement.executeQuery();
+
+            log.info("Данные из базы получены");
+            String nameColls[] = calls.split(",");
+           while (resultSet.next()) {
+
+               employeeList.add( new Employee.Builder(new StringBuffer(param.get(nameColl).toString())).getPolicyholder(
+                        new StringBuffer(resultSet.getString(nameColls[0].toString())),
+                        new StringBuffer(resultSet.getString(nameColls[1].toString())),
+                        new StringBuffer(resultSet.getString(nameColls[2].toString())),
+                        new StringBuffer(resultSet.getString(nameColls[3].toString())),
+                        new StringBuffer(resultSet.getString(nameColls[4].toString())),
+                        LocalDate.parse(resultSet.getString(nameColls[5].toString())),
+                        new Boolean(resultSet.getString(nameColls[6].toString())),
+                        new StringBuffer(resultSet.getString(nameColls[7].toString())),
+                        new StringBuffer(resultSet.getString(nameColls[8].toString()))
+                         ).buidl());
+
+
+//                if (resultSet.getString(nameColl)!=null){
+//                    isdDate =true;
+//                }
+//                country = resultSet.getString("country");
+//                if (country == null) {
+//                    country = "-";
+//                }
+//                area = resultSet.getString("area");
+//                if (area == null) {
+//                    area = "-";
+//                }
+//                region = resultSet.getString("region");
+//                if (region == null) {
+//                    region = "-";
+//                }
+//                city = resultSet.getString("city");
+//                if (city == null) {
+//                    city = "-";
+//                }
+            }
+
+
+        } catch (SQLException e) {
+            log.error("Ошибка доступности данных");
+//            log.error("Это сообщение ошибки, Метод findHumen вернул пустой список");
+            log.error(new String(e.getSQLState()));
+            log.error(e.getStackTrace().toString());
+        }
+//        finally {
+//            if (isdDate){
+//
+//
+//
+//            }else {
+////                log.warn("".join(" ",param.get(nameColl).toString(), " в базе данный снилс не найден"));
+//                return new Employee.Builder(new StringBuffer(param.get(nameColl).toString())).getPFR(
+//                        new StringBuffer("-"),
+//                        new StringBuffer("-"),
+//                        new StringBuffer("-"),
+//                        new StringBuffer("-")).buidl();
+//            }
+//        }
+        finally {
+            return employeeList;
+        }
     }
 
     // поиск информации о человеке по СНИЛС
@@ -301,7 +393,7 @@ public class DbHandler {
      */
     public void addData(String nameTable, LinkedHashMap nameColls) throws SQLException {
         StringBuffer volue = new StringBuffer();
-        try (PreparedStatement statement = this.connection.prepareStatement("".join("", "SELECT ", "snils ", "FROM db2admin.", nameTable, " Where snils=?")))
+        try (PreparedStatement statement = this.connection.prepareStatement("".join("", "SELECT ", "snils, UUID_R ", "FROM db2admin.", nameTable, " Where snils=?")))
 
          {
             statement.setObject(1,nameColls.get("snils").toString());
@@ -336,7 +428,7 @@ public class DbHandler {
                     log.error(e.getStackTrace().toString());
                 }
             } else {
-                log.warn("".join(" ", "Снилс по uuid-у'",  nameColls.get("uuid_R").toString(), "' уже существует  и не будет добавлен в таблицу", nameTable));
+                log.warn("".join(" ", "Снилс'",nameColls.get("snils").toString(),"' уже существует","UUID = ", resultSet.getString("UUID_R"),"  и не будет добавлен в таблицу", nameTable));
 //                System.out.println();
             }
 
