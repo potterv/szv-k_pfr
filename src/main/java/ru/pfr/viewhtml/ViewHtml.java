@@ -64,7 +64,7 @@ public class ViewHtml {
 //        dbHandler=this.modelSzvk.getConnectDb();
         model.addAttribute("namePage", "getdate");
         model.addAttribute("massege", "Данные обрабатываются");
-        this.employeeList = this.modelSzvk.getEmployeeList(dbHandler);
+        this.employeeList = this.modelSzvk.getAllEmployees(dbHandler);
         model.addAttribute("massege", "Данные обработаны");
 //        model.addAttribute("employees", this.employeeList);
 //        model.addAttribute("employeesCount", modelSzvk.getEmployee(dbHandler).size());

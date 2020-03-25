@@ -117,7 +117,7 @@ public class DbHandler {
             // В resultSet будет храниться результат нашего запроса,
             // который выполняется командой statement.executeQuery()
 //            ResultSet resultSet = statement.executeQuery("SELECT snils, country, area, region, city  FROM HUMEN");
-            pstmt=this.connection.prepareStatement("SELECT distinct snils,uuid_p, uuid_r,surname, name, country, patronymic,birthday, area, region, city  FROM db2admin.view_employee_with_adress where uuid_p ='bb2a1ab0-db5f-4294-8402-eecd5846b894'");
+            pstmt=this.connection.prepareStatement("SELECT distinct snils,uuid_p, uuid_r,surname, name, country, patronymic,birthday, area, region, city  FROM db2admin.view_employee_with_adress order by surname");
 //            pstmt.setObject(1,snils);
             ResultSet resultSet = pstmt.executeQuery();
             // Проходимся по нашему resultSet и заносим данные в products

@@ -110,6 +110,11 @@ public class Model {
         return employees;
     }
 
+    public List<Employee> getAllEmployees(DbHandler dbHandler){
+
+        return  dbHandler.getAllEployees();
+    }
+
     public CsvWriter getCsv(){
 
         return new CsvWriter();

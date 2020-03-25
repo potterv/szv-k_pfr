@@ -14,7 +14,7 @@ Released   : 20131117
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<!--<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>-->
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
 
@@ -160,7 +160,7 @@ Released   : 20131117
 																			<c:when test="${(count==7)||(count==8)||(count==9)||(count==10)}">
 																					<c:choose>
 																						<c:when test="${fn:split(employeeinfo,',')[count]=='-'}">
-																													 <p><input type="text" value="${fn:split(employeeinfo,',')[count]}" /></p>
+																													<!-- <p><input type="text" value="${fn:split(employeeinfo,',')[count]}" /></p> -->
 																						</c:when>
 																						<c:otherwise>
 																							<c:out value="${fn:split(employeeinfo,',')[count]}"/>
