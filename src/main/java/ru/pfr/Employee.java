@@ -166,13 +166,14 @@ public class Employee implements Comparable<Employee>{
                                         StringBuffer valName,
                                         StringBuffer valPatronymic,
                                         LocalDate valBirthday,
-//                                        boolean valResidenceCrimea,
-//                                        StringBuffer valNamePolicyholdershort,
-//                                        StringBuffer valRegnumber,
                                         StringBuffer valCountry,
                                         StringBuffer valArea,
                                         StringBuffer valRegion,
                                         StringBuffer valCity){
+            //                                        boolean valResidenceCrimea,
+//                                        StringBuffer valNamePolicyholdershort,
+//                                        StringBuffer valRegnumber,
+
             this.uuidPachka=valUuidPachka;
             this.uuidRecord=valUuidRecord;
             this.surname = valSurname;

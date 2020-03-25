@@ -20,7 +20,6 @@ public class Controller {
         model = new Model();
         DbHandler dbHandler = model.getConnectDb();
         model.readDataFromXmlToDb(dbHandler);
-
         new View(model.getEmployeeList(dbHandler),model.getXls());
 
 //        model.addDateToTable(dbHandler,model.getEmployee(dbHandler));

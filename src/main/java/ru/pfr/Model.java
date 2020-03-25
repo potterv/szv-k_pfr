@@ -8,10 +8,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class Model {
     public Model(){
@@ -73,7 +70,7 @@ public class Model {
         log.info(String.join(" ", "файлы для обработки определены"));
         StaxStreamProcessor staxStreamProcessor = new StaxStreamProcessor();
         log.info(String.join(" ", "Инициализирован класс StaxStreamProcessor"));
-
+        this.uuidPachki = staxStreamProcessor.getUuidPachki();
 
         List<Employee> employees = new ArrayList<Employee>();
         log.info(String.join(" ", "Инициализирован список employees"));
@@ -91,7 +88,26 @@ public class Model {
     }
 
     public List<Employee> getEmployeeList(DbHandler dbHandler){
-        return dbHandler.getAllEployees();
+
+        LinkedHashMap param = new LinkedHashMap();
+        param.put("snils","");
+        param.put("uuid_P",this.uuidPachki);
+        param.put("uuid_R","");
+        param.put("surname","");
+        param.put("name","");
+        param.put("patronymic","");
+        param.put("birthday","");
+//        param.put("residenceCrimea","");
+        param.put("country","");
+        param.put("area","");
+        param.put("region","");
+        param.put("city","");
+//        param.put("numberInsured","");
+//        param.put("nameInsured","");
+        List<Employee> employees = new LinkedList<Employee>();
+        employees = dbHandler.getEmployees("view_employee_with_adress","UUID_P",param);
+
+        return employees;
     }
 
     public CsvWriter getCsv(){
@@ -143,13 +159,13 @@ public class Model {
 //            param.put("area",employee.getArea());
 //            param.put("region",employee.getRegion());
 //            param.put("city",employee.getCity());
-            param.put("numberInsured",employee.getRegnumber().toString());
-            param.put("nameInsured",employee.getPolicyholderShort());
+//            param.put("numberInsured",employee.getRegnumber().toString());
+//            param.put("nameInsured",employee.getPolicyholderShort());
 
             dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER",param);
             param.clear();
         }
     }
-
+    private String uuidPachki;
     private static final Logger log = Logger.getLogger(Model.class);
 }

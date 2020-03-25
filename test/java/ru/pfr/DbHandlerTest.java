@@ -147,6 +147,7 @@ public class DbHandlerTest {
 //        param.put("nameInsured","");
         List<Employee> employees = new LinkedList<Employee>();
         employees = dbHandler.getEmployees("view_employee_with_adress","UUID_P",param);
+        System.out.println(employees);
         for (Employee employee: employees
              ) {
             System.out.println(employee);

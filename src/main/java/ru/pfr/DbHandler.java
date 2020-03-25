@@ -252,23 +252,26 @@ public class DbHandler {
     // поиск информации о человеке по СНИЛС
     public List<Employee> getEmployees(String nameTable, String nameColl, LinkedHashMap param) {
         List<Employee> employeeList = new LinkedList<Employee>();
-        employeeList = null;
+//        employeeList = null;
         boolean isdDate=false;
-//        String country = "-";
-//        String area ="-";
-//        String region = "-";
-//        String city = "-";
-        System.out.println(param.keySet().toString());
-        String calls =  param.keySet().toString().replaceAll("\\["," ").replaceAll("]"," ");
-        System.out.println(calls);
+        String snils ="";
+        String country = "-";
+        String area ="-";
+        String region = "-";
+        String city = "-";
+
+        String calls =  param.keySet().toString().replaceAll("\\["," ").replaceAll("]"," ").replaceAll(" ","");
+
+
         String vallColl = param.get("uuid_P").toString();
-        System.out.println(vallColl);
 
         String sql = "".join("",
-                "SELECT distinct",calls,
-                " FROM db2admin.",nameTable," WHERE ",nameColl,"=?");
-        System.out.println(sql);
-//        try (Statement statement = this.connection.createStatement()  )
+                "SELECT distinct ",calls,
+                " FROM db2admin.",nameTable," WHERE ",nameColl,"=? order by surname");
+
+        String nameColls[] = calls.split(",");
+
+
         try (  PreparedStatement statement = this.connection.prepareStatement(sql))
         {
             statement.setObject(1, vallColl);
@@ -276,47 +279,52 @@ public class DbHandler {
             ResultSet resultSet = statement.executeQuery();
 
             log.info("Данные из базы получены");
-            String nameColls[] = calls.split(",");
-            System.out.println(nameColls.toString());
-            System.out.println(resultSet.next());
-            while (resultSet.next()) {
 
-               employeeList.add( new Employee.Builder(new StringBuffer(param.get(nameColls[0]).toString())).getPolicyholder(
+
+           while (resultSet.next()) {
+
+
+
+                if (resultSet.getString(nameColl)!=null){
+                    isdDate =true;
+                }
+
+                snils = resultSet.getString("snils");
+
+                country = resultSet.getString(nameColls[7].toString());
+                if (country == null) {
+                    country = "-";
+                }
+                area = resultSet.getString(nameColls[8].toString());
+                if (area == null) {
+                    area = "-";
+                }
+                region = resultSet.getString(nameColls[9].toString());
+                if (region == null) {
+                    region = "-";
+                }
+                city = resultSet.getString(nameColls[10].toString());
+                if (city == null) {
+                    city = "-";
+                }
+
+                employeeList.add( new Employee.Builder(new StringBuffer(resultSet.getString("snils"))).getPolicyholder(
 
                         new StringBuffer(resultSet.getString(nameColls[1].toString())),
                         new StringBuffer(resultSet.getString(nameColls[2].toString())),
                         new StringBuffer(resultSet.getString(nameColls[3].toString())),
                         new StringBuffer(resultSet.getString(nameColls[4].toString())),
-                       new StringBuffer(resultSet.getString(nameColls[5].toString())),
-                       LocalDate.parse(resultSet.getString(nameColls[5].toString())),
-//
-                        new StringBuffer(resultSet.getString(nameColls[6].toString())),
-                        new StringBuffer(resultSet.getString(nameColls[7].toString())),
-                       new StringBuffer(resultSet.getString(nameColls[8].toString())),
-                       new StringBuffer(resultSet.getString(nameColls[9].toString()))
+                        new StringBuffer(resultSet.getString(nameColls[5].toString())),
+                        LocalDate.parse(resultSet.getString("birthday")),
+                        new StringBuffer(country),
+                        new StringBuffer(area),
+                        new StringBuffer(region),
+                        new StringBuffer(city)
                          ).buidl());
 
-
-//                if (resultSet.getString(nameColl)!=null){
-//                    isdDate =true;
-//                }
-//                country = resultSet.getString("country");
-//                if (country == null) {
-//                    country = "-";
-//                }
-//                area = resultSet.getString("area");
-//                if (area == null) {
-//                    area = "-";
-//                }
-//                region = resultSet.getString("region");
-//                if (region == null) {
-//                    region = "-";
-//                }
-//                city = resultSet.getString("city");
-//                if (city == null) {
-//                    city = "-";
-//                }
             }
+
+
 
            return employeeList;
 
@@ -324,24 +332,8 @@ public class DbHandler {
         } catch (SQLException e) {
             log.error("Ошибка доступности данных");
 //            log.error("Это сообщение ошибки, Метод findHumen вернул пустой список");
-            log.error(new String(e.getSQLState()));
-            log.error(e.getStackTrace().toString());
-        }
-//        finally {
-//            if (isdDate){
-//
-//
-//
-//            }else {
-////                log.warn("".join(" ",param.get(nameColl).toString(), " в базе данный снилс не найден"));
-//                return new Employee.Builder(new StringBuffer(param.get(nameColl).toString())).getPFR(
-//                        new StringBuffer("-"),
-//                        new StringBuffer("-"),
-//                        new StringBuffer("-"),
-//                        new StringBuffer("-")).buidl();
-//            }
-//        }
-        finally {
+            log.error(e.getSQLState());
+            log.error(e.getStackTrace());
             return Collections.emptyList();
         }
     }
