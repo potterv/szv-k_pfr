@@ -15,12 +15,11 @@ public class DbHandlerTest {
 
 
     @Test
-    public void getAllHumen() throws SQLException {
+    public void getAllEmployees() throws SQLException {
         DbHandler dbHandler = DbHandler.getInstance();
         // Получаем все записи и выводим их на консоль
-//        FactoryHuman fh = new FactoryHuman();
-//        Human humanFromPFR =  fh.getCurrentHuman(FactoryHuman.InDate.FROMPFR);
-        List<Employee> Humen = dbHandler.getAllHumen();
+
+        List<Employee> Humen = dbHandler.getAllEployees();
         for (Employee human : Humen) {
             System.out.println(human);
         }
@@ -97,10 +96,10 @@ public class DbHandlerTest {
 
 
             Collections.sort(employeesAdd);
-        System.out.println(employeesAdd);
+//        System.out.println(employeesAdd);
             for (Employee employee: employeesAdd
                  ) {
-                System.out.println(employee.toString());
+//                System.out.println(employee.toString());
                 linkedHashMap.clear();
                 linkedHashMap.put("uuid_P",employee.getUuidPachka());
                 linkedHashMap.put("uuid_R",employee.getUuidRecord());
@@ -111,7 +110,7 @@ public class DbHandlerTest {
                 linkedHashMap.put("birthday",employee.getBirthday());
                 linkedHashMap.put("residenceCrimea",employee.getResidenceCrimea());
 
-                dbHandler.addData("EMPLOYEES_POLICYHOLDER",linkedHashMap);
+                dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER",linkedHashMap);
 
 
             }
@@ -129,25 +128,25 @@ public class DbHandlerTest {
 //        return " ";
 //    }
     @Test
-    public void getEmployee() throws SQLException {
+    public void getEmployees() throws SQLException {
         DbHandler dbHandler = DbHandler.getInstance();
         LinkedHashMap param = new LinkedHashMap();
-        param.put("uuid_P","");
-        param.put("uuid_R","");
         param.put("snils","");
+        param.put("uuid_P","bb2a1ab0-db5f-4294-8402-eecd5846b894");
+        param.put("uuid_R","");
         param.put("surname","");
         param.put("name","");
         param.put("patronymic","");
         param.put("birthday","");
-        param.put("residenceCrimea","");
+//        param.put("residenceCrimea","");
         param.put("country","");
         param.put("area","");
         param.put("region","");
         param.put("city","");
-        param.put("numberInsured","");
-        param.put("nameInsured","");
+//        param.put("numberInsured","");
+//        param.put("nameInsured","");
         List<Employee> employees = new LinkedList<Employee>();
-        employees = dbHandler.getEmployee("EMPLOYEES_POLICYHOLDER","UUID_P",param);
+        employees = dbHandler.getEmployees("view_employee_with_adress","UUID_P",param);
         for (Employee employee: employees
              ) {
             System.out.println(employee);

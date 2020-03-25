@@ -2,6 +2,7 @@ package ru.pfr;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import ru.pfr.xlsmodel.StreamExcel;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -13,6 +14,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Model {
+    public Model(){
+
+    }
+
 
     public List<Employee> getEmployee(DbHandler dbHandler) throws IOException, XMLStreamException, SQLException {
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
@@ -38,7 +43,7 @@ public class Model {
                 linkedHashMapParam.put("area","");
                 linkedHashMapParam.put("region","");
                 linkedHashMapParam.put("city","");
-                Employee employeedb =dbHandler.getEmployee("HUMEN","snils",linkedHashMapParam);
+                Employee employeedb =dbHandler.getHumen("EMPLOYEES_FROM_MIC","snils",linkedHashMapParam);
                 employee.setCountry(employeedb.getCountry());
                 employee.setArea(employeedb.getArea());
                 employee.setRegion(employeedb.getRegion());
@@ -56,6 +61,11 @@ public class Model {
     public CsvWriter getCsv(){
 
         return new CsvWriter();
+    }
+
+    public StreamExcel getXls(){
+
+        return new StreamExcel();
     }
 
     public DbHandler getConnectDb(){
@@ -81,9 +91,10 @@ public class Model {
         return null;
     }
     public void addDateToTable(DbHandler dbHandler,List<Employee> employeeList) throws SQLException {
-
+        LinkedHashMap param = new LinkedHashMap();
         for (Employee employee:employeeList) {
-            LinkedHashMap param = new LinkedHashMap();
+
+
             param.put("uuid_P",employee.getUuidPachka());
             param.put("uuid_R",employee.getUuidRecord());
             param.put("snils",employee.getSnils());
@@ -92,14 +103,15 @@ public class Model {
             param.put("patronymic",employee.getPatronymic());
             param.put("birthday",employee.getBirthday().toString());
             param.put("residenceCrimea",employee.getResidenceCrimea());
-            param.put("country",employee.getCountry());
-            param.put("area",employee.getArea());
-            param.put("region",employee.getRegion());
-            param.put("city",employee.getCity());
+//            param.put("country",employee.getCountry());
+//            param.put("area",employee.getArea());
+//            param.put("region",employee.getRegion());
+//            param.put("city",employee.getCity());
             param.put("numberInsured",employee.getRegnumber().toString());
             param.put("nameInsured",employee.getPolicyholderShort());
 
-            dbHandler.addData("EMPLOYEES_POLICYHOLDER",param);
+            dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER",param);
+            param.clear();
         }
     }
 

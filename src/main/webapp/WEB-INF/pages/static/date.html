@@ -1,0 +1,10 @@
+<table border = 1>
+
+    <c:forEach var="counter" begin="1" end="${employeesCount}">
+        <tr>
+            <td>
+                <c:out value="${employees[counter]} "/>
+            </td>
+        </tr>
+    </c:forEach>
+</table>

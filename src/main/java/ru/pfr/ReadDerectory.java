@@ -5,13 +5,10 @@ package ru.pfr;
 
 import java.io.File;
 
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 
-import javax.swing.*;
-import java.awt.print.PrinterException;
 import java.util.*;
 
 
@@ -54,18 +51,18 @@ public class ReadDerectory {
 
 
     //    признак что БУДЕТ обработка СМЗВК
-    public void setSZVKFiles(boolean szvmFiles) {
-        this.SZVKFiles = szvmFiles;
+    public void setSZVKFiles(boolean szvkFiles) {
+        this.SZVKFiles = szvkFiles;
     }
 
     public String getPathInSZVM() {
-        return PATHINSZK;
+        return PATHINSZVK;
     }
 
-    public static final String PATHRESPONCE = "mail/responce/";
-    public static final String PATHINSZK = "mail/inSZVK/";
-    private static final String PATHOUT = "mail/out/";
-    private static final String PATHREQUEST = "mail/request";
+    public static final String PATHRESPONCE = "".join("",new File("").getAbsolutePath(),"/mail/responce/");
+    public static final String PATHINSZVK = "".join("",new File("").getAbsolutePath(),"mail/inSZVK/");
+    private static final String PATHOUT = "".join("",new File("").getAbsolutePath(),"mail/out/");
+    private static final String PATHREQUEST = "".join("",new File("").getAbsolutePath(),"mail/request");
     private File inFolder;//= new File(pathInSZVM);
     //    private File request=new File(PATHREQUEST);
 //    private File outFolder = new File(PATHOUT);

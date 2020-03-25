@@ -8,6 +8,7 @@ import org.apache.log4j.PropertyConfigurator.*;
 //import org.sqlite.JDBC;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import java.sql.PreparedStatement;
@@ -91,13 +92,23 @@ public class DbHandler {
 //        log.info("Подключение к базе  выполнено");
 
     }
-
-    public List<Employee> getAllHumen() {
+    /**
+     * Метод для получения записей из таблицу view_employee_with_adress с параметрами
+     *
+     */
+    public List<Employee> getAllEployees() {
         String snils ="";
         String country = "";
         String area ="";
         String region = "";
         String city = "";
+        String uuidpachki="";
+        String uuidRecor ="";
+        String surname ="";
+        String name ="";
+        String patronymic="";
+        String birthday = "";
+
         // Statement используется для того, чтобы выполнить sql-запрос
         try (Statement statement = this.connection.createStatement()  ) {
 
@@ -106,7 +117,7 @@ public class DbHandler {
             // В resultSet будет храниться результат нашего запроса,
             // который выполняется командой statement.executeQuery()
 //            ResultSet resultSet = statement.executeQuery("SELECT snils, country, area, region, city  FROM HUMEN");
-            pstmt=this.connection.prepareStatement("SELECT snils, country, area, region, city  FROM HUMEN ");
+            pstmt=this.connection.prepareStatement("SELECT distinct snils,uuid_p, uuid_r,surname, name, country, patronymic,birthday, area, region, city  FROM db2admin.view_employee_with_adress where uuid_p ='bb2a1ab0-db5f-4294-8402-eecd5846b894'");
 //            pstmt.setObject(1,snils);
             ResultSet resultSet = pstmt.executeQuery();
             // Проходимся по нашему resultSet и заносим данные в products
@@ -115,21 +126,27 @@ public class DbHandler {
 
                     country = resultSet.getString("country");
                 if (country== null){
-                    country ="";
+                    country ="-";
                 }
                     area = resultSet.getString("area");
                 if (area==null){
-                    area ="";
+                    area ="-";
                 }
                 region =resultSet.getString("region");
                 if (region==null){
-                    region ="";
+                    region ="-";
                 }
                 city = resultSet.getString("city");
                 if (city==null){
-                    city ="";
+                    city ="-";
                 }
-                employees.add(new Employee.Builder(new StringBuffer(snils)).getPFR(
+                employees.add(new Employee.Builder(new StringBuffer(snils)).getPolicyholder(
+                        new StringBuffer(resultSet.getString("uuid_p")),
+                        new StringBuffer(resultSet.getString("uuid_r")),
+                        new StringBuffer(resultSet.getString("surname")),
+                        new StringBuffer(resultSet.getString("name")),
+                        new StringBuffer(resultSet.getString("patronymic")),
+                        LocalDate.parse(resultSet.getString("birthday")),
                         new StringBuffer(country),
                         new StringBuffer(area),
                         new StringBuffer(region),
@@ -233,7 +250,7 @@ public class DbHandler {
      * @param nameColl - Имя поля в таблице по кторому выполняется фильтр
      */
     // поиск информации о человеке по СНИЛС
-    public List<Employee>  getEmployee(String nameTable, String nameColl, LinkedHashMap param) {
+    public List<Employee> getEmployees(String nameTable, String nameColl, LinkedHashMap param) {
         List<Employee> employeeList = new LinkedList<Employee>();
         employeeList = null;
         boolean isdDate=false;
@@ -241,12 +258,16 @@ public class DbHandler {
 //        String area ="-";
 //        String region = "-";
 //        String city = "-";
+        System.out.println(param.keySet().toString());
         String calls =  param.keySet().toString().replaceAll("\\["," ").replaceAll("]"," ");
-        String vallColl = param.get(nameColl).toString();
+        System.out.println(calls);
+        String vallColl = param.get("uuid_P").toString();
+        System.out.println(vallColl);
 
         String sql = "".join("",
                 "SELECT ",calls,
                 " FROM db2admin.",nameTable," WHERE ",nameColl,"=?");
+        System.out.println(sql);
 //        try (Statement statement = this.connection.createStatement()  )
         try (  PreparedStatement statement = this.connection.prepareStatement(sql))
         {
@@ -256,18 +277,22 @@ public class DbHandler {
 
             log.info("Данные из базы получены");
             String nameColls[] = calls.split(",");
+            System.out.println(nameColls.toString());
            while (resultSet.next()) {
 
-               employeeList.add( new Employee.Builder(new StringBuffer(param.get(nameColl).toString())).getPolicyholder(
-                        new StringBuffer(resultSet.getString(nameColls[0].toString())),
+               employeeList.add( new Employee.Builder(new StringBuffer(param.get(nameColls[0]).toString())).getPolicyholder(
+
                         new StringBuffer(resultSet.getString(nameColls[1].toString())),
                         new StringBuffer(resultSet.getString(nameColls[2].toString())),
                         new StringBuffer(resultSet.getString(nameColls[3].toString())),
                         new StringBuffer(resultSet.getString(nameColls[4].toString())),
-                        LocalDate.parse(resultSet.getString(nameColls[5].toString())),
-                        new Boolean(resultSet.getString(nameColls[6].toString())),
+                       new StringBuffer(resultSet.getString(nameColls[5].toString())),
+                       LocalDate.parse(resultSet.getString(nameColls[5].toString())),
+//
+                        new StringBuffer(resultSet.getString(nameColls[6].toString())),
                         new StringBuffer(resultSet.getString(nameColls[7].toString())),
-                        new StringBuffer(resultSet.getString(nameColls[8].toString()))
+                       new StringBuffer(resultSet.getString(nameColls[8].toString())),
+                       new StringBuffer(resultSet.getString(nameColls[9].toString()))
                          ).buidl());
 
 
@@ -292,6 +317,8 @@ public class DbHandler {
 //                }
             }
 
+           return employeeList;
+
 
         } catch (SQLException e) {
             log.error("Ошибка доступности данных");
@@ -314,7 +341,7 @@ public class DbHandler {
 //            }
 //        }
         finally {
-            return employeeList;
+            return Collections.emptyList();
         }
     }
 

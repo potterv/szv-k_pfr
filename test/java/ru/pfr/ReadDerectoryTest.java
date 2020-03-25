@@ -3,6 +3,7 @@ package ru.pfr;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,9 @@ public class ReadDerectoryTest {
     @Test
     public void getListFiles() {
 //        Тестовый  путь для проверки метода
-        String pathD = "mail\\inSZVK";
+
+        String pathD = String.join("",new File("").getAbsolutePath(),"\\mail\\inSZVK");
+        System.out.println(pathD);
         ReadDerectory rf= ReadDerectory.getInstance();
         rf.getListFiles(pathD);
         List<StringBuffer> lf = new LinkedList<StringBuffer>();

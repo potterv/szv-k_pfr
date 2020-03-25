@@ -1,0 +1,71 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:context="http://www.springframework.org/schema/context"
+               xmlns:mvc="http://www.springframework.org/schema/mvc"
+               xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        ">
+
+<context:property-placeholder location="file:app.properties"
+                              ignore-resource-not-found="true"/>
+
+<context:component-scan base-package="ru.pfr"/>
+
+<!--  контекст для статических данных-->
+  <mvc:default-servlet-handler default-servlet-name="default"/>
+
+  <mvc:resources mapping = "/images/**" location = "/WEB-INF/pages/static/images/" />
+  <mvc:resources mapping = "/fonts/**" location = "/WEB-INF/pages/static/fonts/" />
+  <mvc:resources mapping = "/css/**" location = "/WEB-INF/pages/static/css/" />
+  <mvc:resources mapping = "/static/**" location = "/WEB-INF/pages/static/" />
+
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+  <property name="prefix" value="/WEB-INF/pages/"/>
+  <property name="suffix" value=".jsp"/>
+</bean>
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/pages/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize" value="200000" />
+  </bean>
+
+  <!-- LDAP config -->
+
+<!--      <bean id="myAuthenticationProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">-->
+<!--          <constructor-arg ref="ldapBindAuthenticator"/>-->
+<!--          <constructor-arg ref="ldapAuthoritiesPopulator"/>-->
+<!--      </bean>-->
+
+<!--      <bean id="ldapBindAuthenticator" class="org.springframework.security.ldap.authentication.BindAuthenticator">-->
+<!--          <constructor-arg ref="contextSource" />-->
+<!--          <property name="userSearch" ref="userSearch"/>-->
+<!--      </bean>-->
+
+<!--      <bean id="userSearch" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">-->
+<!--          <constructor-arg index="0" value="ou=Users,dc=0092,dc=pfr,dc=ru"/>-->
+<!--          <constructor-arg index="1" value="(sAMAccountName={0})"/>-->
+<!--          <constructor-arg index="2" ref="contextSource"/>-->
+<!--          <property name="searchSubtree" value="true"/>-->
+<!--      </bean>-->
+
+<!--&lt;!&ndash;      <bean id="ldapAuthoritiesPopulator" class="com.xxxx.MyLdapAuthoritiesPopulator">&ndash;&gt;-->
+<!--&lt;!&ndash;          <property name="userDao" ref="userDao"/>&ndash;&gt;-->
+<!--&lt;!&ndash;      </bean>&ndash;&gt;-->
+
+<!--      <bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">-->
+<!--  &lt;!&ndash;        <constructor-arg value="ldaps://aaa.com:123/DC=aa,DC=bb,DC=cc,DC=dd"/>&ndash;&gt;-->
+<!--  &lt;!&ndash;        <property name="base" value="DC=aa,DC=bb,DC=cc,DC=dd" />&ndash;&gt;-->
+<!--          <constructor-arg value="ldap://10.92.0.25:389/dc=0092,dc=pfr,dc=ru"/>-->
+<!--          <property name="userDn" value="cn=092Infomat,dc=0092,dc=pfr,dc=ru"/>-->
+<!--          <property name="password" value="Sev7777"/>-->
+<!--          &lt;!&ndash; <property name="anonymousReadOnly" value="true"/> &ndash;&gt;-->
+
+<!--      </bean>-->
+
+</beans>

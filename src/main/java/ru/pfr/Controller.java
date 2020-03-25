@@ -18,8 +18,12 @@ public class Controller {
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
         log.info("Старт обработки");
         model = new Model();
-        new View(model.getEmployee(model.getConnectDb()),model.getCsv());
-        model.addDateToTable(model.getConnectDb(),model.getEmployee(model.getConnectDb()));
+        DbHandler dbHandler = model.getConnectDb();
+        model.addDateToTable(dbHandler,model.getEmployee(dbHandler));
+        new View(model.getEmployee(dbHandler),model.getXls());
+//      new View(model.getEmployee(dbHandler),model.getCsv());
+//      model.getEmployee(dbHandler);
+//      model.addDateToTable(dbHandler,model.getEmployee(model.getConnectDb()));
         log.info("Окончание обработки");
     }
     private static final Logger log = Logger.getLogger(Controller.class);

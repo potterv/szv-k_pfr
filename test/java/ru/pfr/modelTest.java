@@ -11,7 +11,8 @@ public class modelTest {
     @Test
     public void print() throws IOException, XMLStreamException, SQLException {
         Model m = new Model();
-        m.getCsv().saveCsv(m.getEmployee(DbHandler.getInstance()));
+        DbHandler dbHandler = DbHandler.getInstance();
+        m.getCsv().saveCsv(m.getEmployee(dbHandler));
 
     }
 }

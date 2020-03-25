@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.xml.stream.XMLStreamException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class StaxStreamProcessorTest {
     public void readXml() throws IOException, XMLStreamException {
 
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
-        String pathD = "D:\\IdeaProject\\szvk\\mail\\inSZVK";
+        String pathD = "".join("",new File("").getAbsolutePath(),"/mail/inSZVK") ;
 
         ReadDerectory rf= ReadDerectory.getInstance();
 

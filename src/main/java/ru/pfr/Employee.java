@@ -121,7 +121,15 @@ public class Employee implements Comparable<Employee>{
             this.name = name;
             this.patronymic = patronymic;
         }
-        public Builder  getPolicyholder(StringBuffer valUuidPachka,StringBuffer valUuidRecord,StringBuffer valSurname,StringBuffer valName, StringBuffer valPatronymic, LocalDate valBirthday, boolean valResidenceCrimea, StringBuffer valNamePolicyholdershort, StringBuffer valRegnumber){
+        public Builder  getPolicyholder(StringBuffer valUuidPachka,
+                                        StringBuffer valUuidRecord,
+                                        StringBuffer valSurname,
+                                        StringBuffer valName,
+                                        StringBuffer valPatronymic,
+                                        LocalDate valBirthday,
+                                        boolean valResidenceCrimea,
+                                        StringBuffer valNamePolicyholdershort,
+                                        StringBuffer valRegnumber){
             this.uuidPachka=valUuidPachka;
             this.uuidRecord=valUuidRecord;
             this.surname = valSurname;
@@ -134,7 +142,13 @@ public class Employee implements Comparable<Employee>{
             return this;
         }
 
-        public Builder  getPolicyholder(StringBuffer valUuidPachka,StringBuffer valUuidRecord, StringBuffer valSurname,StringBuffer valName, StringBuffer valPatronymic, LocalDate valBirthday, boolean valResidenceCrimea){
+        public Builder  getPolicyholder(StringBuffer valUuidPachka,
+                                        StringBuffer valUuidRecord,
+                                        StringBuffer valSurname,
+                                        StringBuffer valName,
+                                        StringBuffer valPatronymic,
+                                        LocalDate valBirthday,
+                                        boolean valResidenceCrimea){
             this.uuidPachka=valUuidPachka;
             this.uuidRecord=valUuidRecord;
             this.surname = valSurname;
@@ -143,6 +157,35 @@ public class Employee implements Comparable<Employee>{
             this.residenceCrimea = valResidenceCrimea;
             this.birthday = valBirthday;
 
+            return this;
+        }
+
+        public Builder  getPolicyholder(StringBuffer valUuidPachka,
+                                        StringBuffer valUuidRecord,
+                                        StringBuffer valSurname,
+                                        StringBuffer valName,
+                                        StringBuffer valPatronymic,
+                                        LocalDate valBirthday,
+//                                        boolean valResidenceCrimea,
+//                                        StringBuffer valNamePolicyholdershort,
+//                                        StringBuffer valRegnumber,
+                                        StringBuffer valCountry,
+                                        StringBuffer valArea,
+                                        StringBuffer valRegion,
+                                        StringBuffer valCity){
+            this.uuidPachka=valUuidPachka;
+            this.uuidRecord=valUuidRecord;
+            this.surname = valSurname;
+            this.name = valName;
+            this.patronymic = valPatronymic;
+//            this.residenceCrimea = valResidenceCrimea;
+            this.birthday = valBirthday;
+//            this.namepolicyholdershort= valNamePolicyholdershort;
+//            this.regnumber = valRegnumber;
+            this.country = valCountry;
+            this.area = valArea;
+            this.region = valRegion;
+            this.city = valCity;
             return this;
         }
 

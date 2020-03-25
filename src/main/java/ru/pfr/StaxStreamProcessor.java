@@ -43,6 +43,10 @@ public class StaxStreamProcessor {
         return this.employeeList;
     }
 
+    public String getUuidPachki(){
+        return uuidPachka;
+    }
+
 
 
 
@@ -178,6 +182,7 @@ public class StaxStreamProcessor {
         log.info(String.join(" ","Завершен  процес анализа, чтения и загрузки данных из файла",policyholder.get("namefile").toString()));
         log.info(String.join(" ","Завершен  процес чтения и загрузки  данных по страхователю",policyholder.get("namepolicyholder").toString(),policyholder.get("regnumber").toString()));
     }
+
     private Map policyholder =null;
     private String uuidPachka=null;
     private String uuidRecord=null;
@@ -185,6 +190,7 @@ public class StaxStreamProcessor {
     private String surname=null;
     private String name =null;
     private String patronymic=null;
+
     String birthday =null;
     private boolean residenceCrimea;
     private List<Employee> employeeList = null;
