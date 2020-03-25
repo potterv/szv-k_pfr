@@ -19,8 +19,12 @@ public class Controller {
         log.info("Старт обработки");
         model = new Model();
         DbHandler dbHandler = model.getConnectDb();
-        model.addDateToTable(dbHandler,model.getEmployee(dbHandler));
-        new View(model.getEmployee(dbHandler),model.getXls());
+        model.readDataFromXmlToDb(dbHandler);
+
+        new View(model.getEmployeeList(dbHandler),model.getXls());
+
+//        model.addDateToTable(dbHandler,model.getEmployee(dbHandler));
+//        new View(model.getEmployee(dbHandler),model.getXls());
 //      new View(model.getEmployee(dbHandler),model.getCsv());
 //      model.getEmployee(dbHandler);
 //      model.addDateToTable(dbHandler,model.getEmployee(model.getConnectDb()));

@@ -19,7 +19,52 @@ public class Model {
     }
 
 
-    public List<Employee> getEmployee(DbHandler dbHandler) throws IOException, XMLStreamException, SQLException {
+//    public List<Employee> getEmployee(DbHandler dbHandler) throws IOException, XMLStreamException, SQLException {
+//        PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
+//
+//        String pathD = "D:\\IdeaProject\\szvk\\mail\\inSZVK";
+//        log.info(String.join(" ", "Определен mail каталог", pathD));
+//        ReadDerectory rf= ReadDerectory.getInstance();
+//        log.info(String.join(" ", "файлы для обработки определены"));
+//        StaxStreamProcessor staxStreamProcessor = new StaxStreamProcessor();
+//        log.info(String.join(" ", "Инициализирован класс StaxStreamProcessor"));
+//
+//
+//        List<Employee> employees = new ArrayList<Employee>();
+//        log.info(String.join(" ", "Инициализирован список employees"));
+//
+//        for (StringBuffer file:rf.getListFiles(pathD)) {
+//            staxStreamProcessor.readXml(file.toString());
+//            log.info(String.join(" ", "обрабатывается файл", file.toString()));
+//            this.addDateToTable(dbHandler,staxStreamProcessor.getAllEmployee());
+//            log.info(String.join(" ", "В таблицу employees_from_policyholder добавлены записи из xml файлов"));
+////            for (Employee employee:staxStreamProcessor.getAllEmployee()) {
+////                LinkedHashMap linkedHashMapParam = new LinkedHashMap();
+////                linkedHashMapParam.put("snils",employee.getSnils().toString());
+////                linkedHashMapParam.put("country","");
+////                linkedHashMapParam.put("area","");
+////                linkedHashMapParam.put("region","");
+////                linkedHashMapParam.put("city","");
+////                Employee employeedb =dbHandler.getHumen("EMPLOYEES_FROM_MIC","snils",linkedHashMapParam);
+////                employee.setCountry(employeedb.getCountry());
+////                employee.setArea(employeedb.getArea());
+////                employee.setRegion(employeedb.getRegion());
+////                employee.setCity(employeedb.getCity());
+////                employees.add(employee);
+////                log.info(String.join(" ", "В employees добавлена запись"));
+////
+////            }
+//        }
+//
+//
+//
+////        dbHandler.close();
+//        Collections.sort(employees);
+//        return employees;
+//    }
+
+
+    public void readDataFromXmlToDb(DbHandler dbHandler) throws IOException, XMLStreamException, SQLException {
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
 
         String pathD = "D:\\IdeaProject\\szvk\\mail\\inSZVK";
@@ -36,26 +81,17 @@ public class Model {
         for (StringBuffer file:rf.getListFiles(pathD)) {
             staxStreamProcessor.readXml(file.toString());
             log.info(String.join(" ", "обрабатывается файл", file.toString()));
-            for (Employee employee:staxStreamProcessor.getAllEmployee()) {
-                LinkedHashMap linkedHashMapParam = new LinkedHashMap();
-                linkedHashMapParam.put("snils",employee.getSnils().toString());
-                linkedHashMapParam.put("country","");
-                linkedHashMapParam.put("area","");
-                linkedHashMapParam.put("region","");
-                linkedHashMapParam.put("city","");
-                Employee employeedb =dbHandler.getHumen("EMPLOYEES_FROM_MIC","snils",linkedHashMapParam);
-                employee.setCountry(employeedb.getCountry());
-                employee.setArea(employeedb.getArea());
-                employee.setRegion(employeedb.getRegion());
-                employee.setCity(employeedb.getCity());
-                employees.add(employee);
-                log.info(String.join(" ", "В employees добавлена запись"));
+            this.addDateToTable(dbHandler,staxStreamProcessor.getAllEmployee());
+            log.info(String.join(" ", "В таблицу employees_from_policyholder добавлены записи из xml файлов"));
 
-            }
         }
+
 //        dbHandler.close();
-        Collections.sort(employees);
-        return employees;
+
+    }
+
+    public List<Employee> getEmployeeList(DbHandler dbHandler){
+        return dbHandler.getAllEployees();
     }
 
     public CsvWriter getCsv(){

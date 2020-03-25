@@ -22,7 +22,7 @@ import java.util.List;
 public class StreamExcel implements InterfaceExcel {
 
     public StreamExcel(){
-        super();
+
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
     }
 

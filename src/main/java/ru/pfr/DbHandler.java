@@ -265,7 +265,7 @@ public class DbHandler {
         System.out.println(vallColl);
 
         String sql = "".join("",
-                "SELECT ",calls,
+                "SELECT distinct",calls,
                 " FROM db2admin.",nameTable," WHERE ",nameColl,"=?");
         System.out.println(sql);
 //        try (Statement statement = this.connection.createStatement()  )
@@ -278,7 +278,8 @@ public class DbHandler {
             log.info("Данные из базы получены");
             String nameColls[] = calls.split(",");
             System.out.println(nameColls.toString());
-           while (resultSet.next()) {
+            System.out.println(resultSet.next());
+            while (resultSet.next()) {
 
                employeeList.add( new Employee.Builder(new StringBuffer(param.get(nameColls[0]).toString())).getPolicyholder(
 
@@ -345,73 +346,7 @@ public class DbHandler {
         }
     }
 
-    // поиск информации о человеке по СНИЛС
-//    public Employee getEmployee(String snils) {
-//
-//        boolean isdDate=false;
-//        String country = "-";
-//        String area ="-";
-//        String region = "-";
-//        String city = "-";
-//
-////        try (Statement statement = this.connection.createStatement()  )
-//        try (  PreparedStatement statement = connection.prepareStatement(
-//                "SELECT snils, country, area, region, city  FROM HUMEN WHERE snils = ?"))
-//        {
-//            statement.setObject(1, snils);
-//            // Выполняем запрос
-//            ResultSet resultSet = statement.executeQuery();
-//
-//            log.info("Данные из базы получены");
-//            if (resultSet.next()) {
-//                if (resultSet.getString("snils")!=null){
-//                    isdDate =true;
-//                }
-//                country = resultSet.getString("country");
-//                if (country == null) {
-//                    country = "-";
-//                }
-//                area = resultSet.getString("area");
-//                if (area == null) {
-//                    area = "-";
-//                }
-//                region = resultSet.getString("region");
-//                if (region == null) {
-//                    region = "-";
-//                }
-//                city = resultSet.getString("city");
-//                if (city == null) {
-//                    city = "-";
-//                }
-//            }
-//
-//        } catch (SQLException e) {
-//            log.error("Ошибка доступности данных");
-////            log.error("Это сообщение ошибки, Метод findHumen вернул пустой список");
-//            log.error(new String(e.getSQLState()));
-//            log.error(e.getStackTrace().toString());
-//        }
-//        finally {
-//            if (isdDate){
-//
-//                return new Employee.Builder(new StringBuffer(snils)).getPFR(
-//                        new StringBuffer(country),
-//                        new StringBuffer(area),
-//                        new StringBuffer(region),
-//                        new StringBuffer(city)).buidl();
-//
-//
-//            }else {
-//                log.warn("".join(" ",snils, " в базе данный снилс не найден"));
-//                return new Employee.Builder(new StringBuffer(snils)).getPFR(
-//                        new StringBuffer("-"),
-//                        new StringBuffer("-"),
-//                        new StringBuffer("-"),
-//                        new StringBuffer("-")).buidl();
-//            }
-//        }
-//
-//    }
+
 
     /**
      * Метод для добовления записей в таблицу с параметрами

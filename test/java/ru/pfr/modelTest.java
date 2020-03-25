@@ -12,7 +12,7 @@ public class modelTest {
     public void print() throws IOException, XMLStreamException, SQLException {
         Model m = new Model();
         DbHandler dbHandler = DbHandler.getInstance();
-        m.getCsv().saveCsv(m.getEmployee(dbHandler));
+        m.getCsv().saveCsv(m.getEmployeeList(dbHandler));
 
     }
 }
