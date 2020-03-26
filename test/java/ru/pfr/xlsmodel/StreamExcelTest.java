@@ -34,6 +34,8 @@ public class StreamExcelTest {
     }
 
     @Test
-    public void readFromXls() {
+    public void readFromXls() throws IOException {
+        StreamExcel streamExcel = new StreamExcel();
+        System.out.println(streamExcel.readFromXls());
     }
 }

@@ -2,6 +2,7 @@ package ru.pfr;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import ru.pfr.fromfms.RowFromFms;
 import ru.pfr.xlsmodel.StreamExcel;
 
 import javax.xml.stream.XMLStreamException;
@@ -106,7 +107,7 @@ public class Model {
 //        param.put("nameInsured","");
         List<Employee> employees = new LinkedList<Employee>();
         employees = dbHandler.getEmployees("view_employee_with_adress","UUID_P",param);
-
+//        Collections.sort(employees);
         return employees;
     }
 
@@ -170,6 +171,23 @@ public class Model {
             dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER",param);
             param.clear();
         }
+    }
+
+    public void loadDataFromFms(DbHandler dbHandler, List<RowFromFms> rows) throws  SQLException {
+
+
+        LinkedHashMap param = new LinkedHashMap();
+        for (RowFromFms row:rows) {
+
+            param.put("snils",UUID.randomUUID().toString());
+            param.put("uuid_P",row.getUuidPachki());
+            param.put("uuid_R",row.getUuidRecord());
+            param.put("Resident_Crimea",row.isResidentCrimea());
+            param.put("commentary",row.getCommentary());
+            dbHandler.addData("FMS_DATA",param);
+            param.clear();
+        }
+
     }
     private String uuidPachki;
     private static final Logger log = Logger.getLogger(Model.class);

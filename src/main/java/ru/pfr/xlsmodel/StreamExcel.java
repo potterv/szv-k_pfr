@@ -8,15 +8,16 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.format.CellFormatType;
 import org.apache.poi.ss.usermodel.Row;
 import ru.pfr.Employee;
+import ru.pfr.fromfms.RowFromFms;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class StreamExcel implements InterfaceExcel {
 
@@ -164,9 +165,105 @@ public class StreamExcel implements InterfaceExcel {
     }
 
     @Override
-    public List<Employee> readFromXls() {
+    public List<RowFromFms> readFromXls() throws IOException {
 
-        return  Collections.emptyList();
+        List<Employee> employees =new LinkedList<Employee>();
+        // Read XSL file
+        FileInputStream inputStream = new FileInputStream(new File(String.join("",new File("").getAbsolutePath(),"\\mail\\response\\От ФМC с uuid_12_03_2020",".xls")));
+
+        // Get the workbook instance for XLS file
+        HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+
+        // Get first sheet from the workbook
+        HSSFSheet sheet = workbook.getSheetAt(0);
+
+        // Get iterator to all the rows in current sheet
+        Iterator<Row> rowIterator = sheet.iterator();
+
+        List<RowFromFms> rowsfms= new ArrayList<RowFromFms>();
+
+        RowFromFms rowFromFms;
+        rowIterator.next();
+        while (rowIterator.hasNext()) {
+
+            Row row = rowIterator.next();
+            rowFromFms = new RowFromFms();
+//            System.out.println(row.getCell(0).getStringCellValue().toString());
+            rowFromFms.setUuidPachki(row.getCell(0).getStringCellValue().toString());
+            rowFromFms.setUuidRecord(row.getCell(1).getStringCellValue().toString());
+
+            if (row.getCell(10).getStringCellValue().equals("да") ){
+                rowFromFms.setResidentCrimea(true);
+
+            }
+            if (row.getCell(10).getStringCellValue().equals("нет")){
+                rowFromFms.setResidentCrimea(false);
+            }
+
+            if (row.getLastCellNum()==11){
+                row.createCell(11, CellType.STRING);
+//
+                rowFromFms.setCommentary("-");
+
+            }else {
+                rowFromFms.setCommentary(row.getCell(11).getStringCellValue().toString());
+
+            }
+
+            rowsfms.add(rowFromFms);
+//            System.out.println();
+            // Get iterator to all cells of current row
+//            Iterator<Cell> cellIterator = row.cellIterator();
+
+
+//            while (cellIterator.hasNext()) {
+//                Cell cell = cellIterator.next();
+//
+//                // Change to getCellType() if using POI 4.x
+//                CellType cellType = cell.getCellType();
+//
+//                switch (cellType) {
+//                    case _NONE:
+//                        System.out.print("");
+//                        System.out.print("\t");
+//                        break;
+//                    case BOOLEAN:
+//                        System.out.print(cell.getBooleanCellValue());
+//                        System.out.print("\t");
+//                        break;
+//                    case BLANK:
+//                        System.out.print("");
+//                        System.out.print("\t");
+//                        break;
+//                    case FORMULA:
+//                        // Formula
+//                        System.out.print(cell.getCellFormula());
+//                        System.out.print("\t");
+//
+//                        FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+//                        // Print out value evaluated by formula
+//                        System.out.print(evaluator.evaluate(cell).getNumberValue());
+//                        break;
+//                    case NUMERIC:
+//                        System.out.print(cell.getNumericCellValue());
+//                        System.out.print("\t");
+//                        break;
+//                    case STRING:
+////                        System.out.print(cell.getStringCellValue());
+//
+//                        System.out.print("\t");
+//                        break;
+//                    case ERROR:
+//                        System.out.print("!");
+//                        System.out.print("\t");
+//                        break;
+//                }
+//
+//            }
+
+//            System.out.println("");
+        }
+        return  rowsfms;
     }
 
     private static final Logger log = Logger.getLogger(StreamExcel.class);
