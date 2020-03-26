@@ -19,8 +19,8 @@ CREATE TABLE EMPLOYEES_FROM_MIC (
 INSERT INTO EMPLOYEES_FROM_MIC (SNILS, surname,name,patronymic, country, area, region, city, numberInsured)
 select SNILS, surname,name,patronymic, country, area, region, city, numberInsured  from HUMEN
 -- индексировние по СНИЛС
-create unique index snils_indx_mic on
-db2admin.EMPLOYEES_FROM_MIC(SNILS);
+create unique index snils_indx_mic_ on
+db2admin.EMPLOYEES_FROM_MIC(id);
 
 ALTER TABLE db2admin.EMPLOYEES_FROM_MIC
 ALTER COLUMN ARE varchar(200);
