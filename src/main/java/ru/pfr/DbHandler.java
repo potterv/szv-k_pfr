@@ -343,14 +343,15 @@ public class DbHandler {
     /**
      * Метод для добовления записей в таблицу с параметрами
      * @param nameTable - имя таблицы
-     * @param nameColls - слоаврь наименований палей и их значений в таблице
+     * @param keyControl  - наименование поля для проверки  загружена ли запись ранее
+     * @param nameColls - слоаврь наименований палей и их значений в таблиц
      */
-    public void addData(String nameTable, LinkedHashMap nameColls) throws SQLException {
+    public void addData(String nameTable, String keyControl , LinkedHashMap nameColls) throws SQLException {
         StringBuffer volue = new StringBuffer();
-        try (PreparedStatement statement = this.connection.prepareStatement("".join("", "SELECT ", "snils, UUID_R ", "FROM db2admin.", nameTable, " Where snils=?")))
+        try (PreparedStatement statement = this.connection.prepareStatement("".join("", "SELECT ", keyControl, ", UUID_R", " FROM db2admin.", nameTable, " Where ",keyControl," =?")))
 
          {
-            statement.setObject(1,nameColls.get("snils").toString());
+            statement.setObject(1,nameColls.get(keyControl).toString());
             ResultSet resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {
@@ -382,7 +383,13 @@ public class DbHandler {
                     log.error(e.getStackTrace().toString());
                 }
             } else {
-                log.warn("".join(" ", "Снилс'",nameColls.get("snils").toString(),"' уже существует","UUID = ", resultSet.getString("UUID_R"),"  и не будет добавлен в таблицу", nameTable));
+
+                if(keyControl.equals("snils")){
+                    log.warn("".join(" ", "Запись с "," UUID_R = ", resultSet.getString("UUID_R")," СНИЛС - ",nameColls.get(keyControl).toString(),"  не будет добавлена в таблицу", nameTable));
+                }else{
+                    log.warn("".join(" ", "Запись с "," UUID_R = ", resultSet.getString("UUID_R"),"  не будет добавлена в таблицу", nameTable));
+                }
+
 //                System.out.println();
             }
 

@@ -1,5 +1,6 @@
 package ru.pfr;
 
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,5 +35,7 @@ public class ReadDerectoryTest {
 
     @Test
     public void getPathInSZVM() {
+        System.out.println(LocalDate.now().toString());
+
     }
 }

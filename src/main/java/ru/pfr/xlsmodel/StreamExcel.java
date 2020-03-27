@@ -188,7 +188,7 @@ public class StreamExcel implements InterfaceExcel {
 
             Row row = rowIterator.next();
             rowFromFms = new RowFromFms();
-//            System.out.println(row.getCell(0).getStringCellValue().toString());
+
             rowFromFms.setUuidPachki(row.getCell(0).getStringCellValue().toString());
             rowFromFms.setUuidRecord(row.getCell(1).getStringCellValue().toString());
 
@@ -211,57 +211,7 @@ public class StreamExcel implements InterfaceExcel {
             }
 
             rowsfms.add(rowFromFms);
-//            System.out.println();
-            // Get iterator to all cells of current row
-//            Iterator<Cell> cellIterator = row.cellIterator();
 
-
-//            while (cellIterator.hasNext()) {
-//                Cell cell = cellIterator.next();
-//
-//                // Change to getCellType() if using POI 4.x
-//                CellType cellType = cell.getCellType();
-//
-//                switch (cellType) {
-//                    case _NONE:
-//                        System.out.print("");
-//                        System.out.print("\t");
-//                        break;
-//                    case BOOLEAN:
-//                        System.out.print(cell.getBooleanCellValue());
-//                        System.out.print("\t");
-//                        break;
-//                    case BLANK:
-//                        System.out.print("");
-//                        System.out.print("\t");
-//                        break;
-//                    case FORMULA:
-//                        // Formula
-//                        System.out.print(cell.getCellFormula());
-//                        System.out.print("\t");
-//
-//                        FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
-//                        // Print out value evaluated by formula
-//                        System.out.print(evaluator.evaluate(cell).getNumberValue());
-//                        break;
-//                    case NUMERIC:
-//                        System.out.print(cell.getNumericCellValue());
-//                        System.out.print("\t");
-//                        break;
-//                    case STRING:
-////                        System.out.print(cell.getStringCellValue());
-//
-//                        System.out.print("\t");
-//                        break;
-//                    case ERROR:
-//                        System.out.print("!");
-//                        System.out.print("\t");
-//                        break;
-//                }
-//
-//            }
-
-//            System.out.println("");
         }
         return  rowsfms;
     }

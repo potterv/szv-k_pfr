@@ -2,6 +2,7 @@ package ru.pfr;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.joda.time.LocalDate;
 import ru.pfr.fromfms.RowFromFms;
 import ru.pfr.xlsmodel.StreamExcel;
 
@@ -79,7 +80,7 @@ public class Model {
         for (StringBuffer file:rf.getListFiles(pathD)) {
             staxStreamProcessor.readXml(file.toString());
             log.info(String.join(" ", "обрабатывается файл", file.toString()));
-            this.addDateToTable(dbHandler,staxStreamProcessor.getAllEmployee());
+            this.addDataFromPoliciholder(dbHandler,staxStreamProcessor.getAllEmployee());
             log.info(String.join(" ", "В таблицу employees_from_policyholder добавлены записи из xml файлов"));
 
         }
@@ -148,7 +149,7 @@ public class Model {
 
         return null;
     }
-    public void addDateToTable(DbHandler dbHandler,List<Employee> employeeList) throws SQLException {
+    public void addDataFromPoliciholder(DbHandler dbHandler, List<Employee> employeeList) throws SQLException {
         LinkedHashMap param = new LinkedHashMap();
         for (Employee employee:employeeList) {
 
@@ -161,6 +162,7 @@ public class Model {
             param.put("patronymic",employee.getPatronymic());
             param.put("birthday",employee.getBirthday().toString());
             param.put("residenceCrimea",employee.getResidenceCrimea());
+            param.put("date_load_file_xml", LocalDate.now().toString());
 //            param.put("country",employee.getCountry());
 //            param.put("area",employee.getArea());
 //            param.put("region",employee.getRegion());
@@ -168,7 +170,7 @@ public class Model {
 //            param.put("numberInsured",employee.getRegnumber().toString());
 //            param.put("nameInsured",employee.getPolicyholderShort());
 
-            dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER",param);
+            dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER","snils",param);
             param.clear();
         }
     }
@@ -177,14 +179,17 @@ public class Model {
 
 
         LinkedHashMap param = new LinkedHashMap();
+
+
         for (RowFromFms row:rows) {
 
-            param.put("snils",UUID.randomUUID().toString());
+//            param.put("snils",UUID.randomUUID().toString());
             param.put("uuid_P",row.getUuidPachki());
             param.put("uuid_R",row.getUuidRecord());
             param.put("Resident_Crimea",row.isResidentCrimea());
             param.put("commentary",row.getCommentary());
-            dbHandler.addData("FMS_DATA",param);
+            param.put("date_load_file_from_fms_xls",LocalDate.now().toString());
+            dbHandler.addData("FMS_DATA","uuid_R",param);
             param.clear();
         }
 

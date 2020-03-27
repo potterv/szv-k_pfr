@@ -110,7 +110,7 @@ public class DbHandlerTest {
                 linkedHashMap.put("birthday",employee.getBirthday());
                 linkedHashMap.put("residenceCrimea",employee.getResidenceCrimea());
 
-                dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER",linkedHashMap);
+                dbHandler.addData("EMPLOYEES_FROM_POLICYHOLDER","snils",linkedHashMap);
 
 
             }
