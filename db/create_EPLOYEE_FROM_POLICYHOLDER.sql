@@ -11,10 +11,19 @@ DROP TABLE EMPLOYEES_FROM_POLICYHOLDER;
 	name	varchar(100),
 	patronymic	varchar(100),
 	birthday	date,
-	residencecrimea	varchar(5)
+	residencecrimea	varchar(5),
+	date_load_file_xml
 	);
 --Очистка таблицы EMPLOYEES_FROM_POLICYHOLDER
 DELETE FROM EMPLOYEES_FROM_POLICYHOLDER;
 
+
 create unique index snils_indx on
 db2admin.EMPLOYEES_FROM_POLICYHOLDER(snils);
+
+ALTER TABLE EMPLOYEES_FROM_POLICYHOLDER
+ ADD date_load_file_xml date;
+ 
+ 
+ UPDATE EMPLOYEES_FROM_POLICYHOLDER
+SET date_load_file_xml = '2020-03-25'
