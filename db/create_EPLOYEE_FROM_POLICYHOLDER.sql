@@ -12,7 +12,7 @@ DROP TABLE EMPLOYEES_FROM_POLICYHOLDER;
 	patronymic	varchar(100),
 	birthday	date,
 	residencecrimea	varchar(5),
-	date_load_file_xml
+	date_load_file_xml date
 	);
 --Очистка таблицы EMPLOYEES_FROM_POLICYHOLDER
 DELETE FROM EMPLOYEES_FROM_POLICYHOLDER;
