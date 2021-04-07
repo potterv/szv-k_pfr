@@ -57,8 +57,8 @@ public class DbHandler {
         PropertyConfigurator.configure("src\\main\\resources\\log4j.properties");
         String jdbcClassName="com.ibm.db2.jcc.DB2Driver";
         String url="jdbc:db2://10.92.0.71:50000/szvk";
-        String user="db2admin";
-        String password="dB2@dm1n";
+        String user="";
+        String password="";
 //        Driver driver = new COM.ibm.db2.jdbc.app.DB2Driver();
 //        DriverManager.registerDriver(driver);
          this.connection = null;
