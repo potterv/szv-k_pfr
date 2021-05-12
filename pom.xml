@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>5.2.2.RELEASE</spring.version>
+        <spring.version>5.2.10.RELEASE</spring.version>
         <jetty.version>9.2.29.v20191105</jetty.version>
         <poi.version>4.0.1</poi.version>
         <maven.compiler.source>1.8</maven.compiler.source>
